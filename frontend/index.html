@@ -3,46 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>SpamShield AI</title>
+
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-    <h1>🛡️ SpamShield AI</h1>
+    <div class="container">
 
-    <p>Detect suspicious messages instantly.</p>
+        <header>
+            <div class="logo">🛡️</div>
 
-    <textarea
-        id="message"
-        placeholder="Paste your message here..."
-        rows="8"
-    ></textarea>
+            <h1>SpamShield AI</h1>
 
-    <br><br>
+            <p class="subtitle">
+                Detect suspicious messages with intelligent spam analysis.
+            </p>
+        </header>
 
-    <button onclick="checkSpam()">🔍 Scan Message</button>
 
-    <div id="result"></div>
+        <main>
+
+            <div class="card">
+
+                <h2>🔍 Message Scanner</h2>
+
+                <p style="margin: 10px 0 20px; color: #6b7280;">
+                    Paste an SMS, email, or suspicious message below.
+                </p>
+
+                <textarea
+                    id="message"
+                    placeholder="Example: Congratulations! You have won ₹50,000. Click this link to claim your prize..."
+                ></textarea>
+
+                <button onclick="checkSpam()">
+                    🔍 Scan Message
+                </button>
+
+                <div id="result">
+                    Your analysis result will appear here.
+                </div>
+
+            </div>
+
+
+            <div class="stats">
+
+                <div class="stat">
+                    <h2 id="totalScans">0</h2>
+                    <p>Total Scans</p>
+                </div>
+
+                <div class="stat">
+                    <h2 id="spamCount">0</h2>
+                    <p>Spam Detected</p>
+                </div>
+
+                <div class="stat">
+                    <h2 id="safeCount">0</h2>
+                    <p>Safe Messages</p>
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
 
     <script>
-        function checkSpam() {
-            const message = document.getElementById("message").value;
-            const result = document.getElementById("result");
 
-            if (message.trim() === "") {
-                result.innerHTML = "⚠️ Please enter a message.";
+        let totalScans = 0;
+        let spamCount = 0;
+        let safeCount = 0;
+
+
+        function checkSpam() {
+
+            const message =
+                document.getElementById("message").value.trim();
+
+            const result =
+                document.getElementById("result");
+
+
+            if (message === "") {
+
+                result.innerHTML =
+                    "⚠️ Please enter a message first.";
+
                 return;
             }
 
-            result.innerHTML = "🔄 Analyzing message...";
+
+            result.innerHTML =
+                "🔄 Analyzing your message...";
+
 
             setTimeout(() => {
-                result.innerHTML =
-                    "🛡️ Analysis complete<br><br>" +
-                    "This is our frontend demo. " +
-                    "The real ML model will be connected later.";
-            }, 1000);
+
+                totalScans++;
+
+                /*
+                 * TEMPORARY DEMO DETECTION
+                 *
+                 * Later we will replace this with
+                 * our real Python ML backend.
+                 */
+
+                const suspiciousWords = [
+                    "winner",
+                    "won",
+                    "prize",
+                    "free",
+                    "urgent",
+                    "claim",
+                    "click",
+                    "money",
+                    "cash",
+                    "offer",
+                    "lottery",
+                    "verify",
+                    "password"
+                ];
+
+
+                const lowerMessage =
+                    message.toLowerCase();
+
+
+                let matches = 0;
+
+
+                suspiciousWords.forEach(word => {
+
+                    if (lowerMessage.includes(word)) {
+                        matches++;
+                    }
+
+                });
+
+
+                if (matches >= 2) {
+
+                    spamCount++;
+
+                    result.innerHTML = `
+                        🚨 <strong>Possible Spam</strong>
+
+                        <br><br>
+
+                        Spam probability:
+                        <strong>${Math.min(95, 60 + matches * 7)}%</strong>
+
+                        <br><br>
+
+                        ⚠️ Suspicious patterns detected.
+                    `;
+
+                } else {
+
+                    safeCount++;
+
+                    result.innerHTML = `
+                        ✅ <strong>Likely Safe</strong>
+
+                        <br><br>
+
+                        Spam probability:
+                        <strong>${Math.max(5, matches * 10)}%</strong>
+
+                        <br><br>
+
+                        No major suspicious patterns detected.
+                    `;
+
+                }
+
+
+                document.getElementById("totalScans")
+                    .textContent = totalScans;
+
+                document.getElementById("spamCount")
+                    .textContent = spamCount;
+
+                document.getElementById("safeCount")
+                    .textContent = safeCount;
+
+            }, 800);
+
         }
+
     </script>
 
 </body>
