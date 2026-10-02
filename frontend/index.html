@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpamShield AI</title>
+</head>
+
+<body>
+
+    <h1>🛡️ SpamShield AI</h1>
+
+    <p>Detect suspicious messages instantly.</p>
+
+    <textarea
+        id="message"
+        placeholder="Paste your message here..."
+        rows="8"
+    ></textarea>
+
+    <br><br>
+
+    <button onclick="checkSpam()">🔍 Scan Message</button>
+
+    <div id="result"></div>
+
+    <script>
+        function checkSpam() {
+            const message = document.getElementById("message").value;
+            const result = document.getElementById("result");
+
+            if (message.trim() === "") {
+                result.innerHTML = "⚠️ Please enter a message.";
+                return;
+            }
+
+            result.innerHTML = "🔄 Analyzing message...";
+
+            setTimeout(() => {
+                result.innerHTML =
+                    "🛡️ Analysis complete<br><br>" +
+                    "This is our frontend demo. " +
+                    "The real ML model will be connected later.";
+            }, 1000);
+        }
+    </script>
+
+</body>
+</html>
